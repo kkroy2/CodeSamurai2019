@@ -1,0 +1,41 @@
+<html><body>
+  <div id="mapdiv"></div>
+  <script src="http://www.openlayers.org/api/OpenLayers.js"></script>
+   <link rel="stylesheet" href="https://openlayers.org/en/v5.2.0/css/ol.css" type="text/css">
+<script src="https://cdn.rawgit.com/openlayers/openlayers.github.io/master/en/v5.2.0/build/ol.js"></script>
+  <script>
+    map = new OpenLayers.Map("mapdiv");
+    map.addLayer(new OpenLayers.Layer.OSM());
+
+    var lonLat = new OpenLayers.LonLat( 90.41 ,23.81 )
+          .transform(
+            new OpenLayers.Projection("EPSG:4326"), // transform from WGS 1984
+            map.getProjectionObject() // to Spherical Mercator Projection
+          );
+
+    var lonLat2 = new OpenLayers.LonLat( 90.51 ,23.81 )
+          .transform(
+            new OpenLayers.Projection("EPSG:4326"), // transform from WGS 1984
+            map.getProjectionObject() // to Spherical Mercator Projection
+          );
+
+
+    var zoom=12;
+
+    var markers = new OpenLayers.Layer.Markers( "Markers" );
+    map.addLayer(markers);
+
+    markers.addMarker(new OpenLayers.Marker(lonLat));
+    markers.addMarker(new OpenLayers.Marker(lonLat2));
+
+var ol = new OpenLayers.Layer.OSM();
+
+var start_point = new OpenLayers.Geometry.Point(90.41 ,23.81);
+var end_point = new OpenLayers.Geometry.Point(90.51 ,23.81);
+
+var vector = new OpenLayers.Layer.Vector();
+vector.addFeatures([new OpenLayers.Feature.Vector(new OpenLayers.Geometry.LineString([start_point, end_point]).transform(new OpenLayers.Projection("EPSG:4326"), new OpenLayers.Projection("EPSG:900913")))]);
+map.addLayers([ol,vector]);
+    map.setCenter (lonLat, zoom);
+  </script>
+</body></html>
